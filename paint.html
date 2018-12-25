@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<style>
+	canvas {
+		border:1px solid #d3d3d3;
+		background-color: #f1f1f1;
+	}
+	</style>
+	</head>
+	<body>
+		<canvas id="myCanvas" width="800px" height="500px"></canvas>
+		<script>
+		
+			var canvas = document.getElementById("myCanvas");
+			var ctx = canvas.getContext("2d");
+			var x = canvas.width / 2;
+			var y = canvas.height / 2;
+			var ballRadius = 30;
+			var gamma = 0;
+			
+			
+			function drawPentagon(center, radius, orientation){
+				theta = orientation;
+				ctx.beginPath();
+				ctx.moveTo(center.x + radius * Math.cos(theta), center.y + radius * Math.sin(theta));
+				for(var i = 0; i < 5; i+=1){
+					theta += 2 * Math.PI / 5;
+					ctx.lineTo(center.x + radius * Math.cos(theta), center.y + radius * Math.sin(theta));
+				}
+				ctx.fillStyle = "#f7cac9";
+				ctx.fill();
+				ctx.closePath();
+			
+			}
+			
+			function drawBall() {
+				ctx.beginPath();
+				ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+				ctx.fillStyle = "#deeaee";
+				ctx.fill();
+				ctx.closePath();
+			}
+			
+			
+			function draw() {
+				ctx.clearRect(0,0,canvas.width,canvas.height);
+				drawBall();
+				//gamma += Math.PI/500
+				for(var i = 0; i < 5; i++){
+					gamma += 2*Math.PI / 5;
+					var centro = {x: x + 2 * ballRadius * Math.cos(gamma), y: y + 2 * ballRadius * Math.sin(gamma)};
+					drawPentagon(centro, 30, gamma);		
+				}
+			}
+			
+			
+			setInterval(draw, 10);
+			
+
+
+		</script>
+	</body>
+</html>
