@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<style>
+	#myCanvas {
+		z-index: auto;
+		position: fixed;
+		padding: 0;
+		margin: auto;
+		display: block;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: #ffffff;
+	}
+	
+	#overlay {
+		position: fixed;
+		display: block;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		margin: auto;
+		background-color: rgba(255,255,255,0);
+		z-index: 2;
+	}
+	
+	.text{
+		position: absolute;
+		top: 50%;
+        left: 50%;
+        font-size: 14.5px;
+		color: black;
+		display: none;
+		transform: translate(-50%,-50%);
+		-ms-transform: translate(-50%,-50%);
+	}
+	
+	
+	</style>
+	</head>
+	<body>
+		
+		<canvas id="myCanvas" height="500px" width="900px"></canvas>
+		<div id="overlay">
+			<div id="t1" class="text">
+				
+					<i>Voci indistinguibili provengono da un'unica sorgente. </i><br><br><br><br>
+					Sapresti quindi scrivere, tu?  Oppure, come sempre, critichi e condanni l'opera di cui non sei l'artefice e che nemmeno nei tuoi sogni pi&ugrave dolci riesci a generare?<br><br>
+					Invidiose salvifiche differenziazioni generarono popoli fertili. <br><br>
+					Sento il terrore. Sono schiavo della disumana conoscenza. <br><br>
+					Eppure un profeta annunci&ograve il giorno della disintegrazione. Cos&igrave continuo ad aspettare. E mi concedo ancora volentieri all'ipocrisia e alla noia.<br><br>
+					Ancora non te ne rendi conto, ma solo un idiota potrebbe pensare in questo modo.<br><br>
+					Certo, &egrave difficile impressionare se stessi. Ma &egrave anche vero che non &egrave facile sfuggirsi. <br><br>
+					La gente parla, certe voci su quali siano le reali motivazioni di questa guerra si fanno sempre pi&ugrave insistenti.<br><br>
+					Ognuno ha una sua complicata teoria, a dire il vero. Personalmente, penso che sia il desiderio di mantenere l'unit&agrave. <br><br>
+					Un colpo di stato. Eppure sento ancora la voce dei dissidenti. <br><br>
+					I dissidenti... <br><br>
+					In fondo, credetti un tempo di diventare metafora. Cos&igrave ora sono tale.<br><br>
+					Tutto &egrave cambiato, domina una nuova unit&agrave. Chi scelse il gioco non decise cos&igrave pure del suo esito?
+				
+			</div>
+			<div id="t2" class="text">
+				testo2
+			</div>
+			<div id="t3" class="text">
+				testo3
+			</div>
+			<div id="t4" class="text">
+				testo4
+			</div>
+			<div id="t0" class="text">
+				testo5
+			</div>
+		</div>
+		<script>
+		
+			var canvas = document.getElementById("myCanvas");
+			var ctx = canvas.getContext("2d");
+			var x = canvas.width / 2;
+			var X = canvas.width / 2;
+			var y = canvas.height / 2;
+			var Y = canvas.height / 2;
+			var radius = 70;
+			var RADIUS = radius;
+			var gamma = 0;
+			var color = ["#f7cac9", "#E32934"];
+			var colorCircle = ["#deeaee","#92a8d1"];
+			var k = 6;
+			var transform = false;
+			//var links = ["index.html","http://www.wikipedia.org","http://www.github.com","http://www.khanacademy.org","http://www.janestreet.com/puzzles/current-puzzle","paint.html"]
+			
+			
+			document.addEventListener("mousemove", mouseFunction, false);
+			document.addEventListener("click", mouseClick, false);
+			
+			function distance(A,B){
+				var distance = Math.sqrt(Math.pow((A.x - B.x),2) + Math.pow((A.y - B.y),2));
+				return distance;
+			}
+				
+				
+			function mouseFunction(e){
+				var relative = {x: e.clientX - canvas.offsetLeft, y: e.clientY - canvas.offsetTop};
+				var phi = gamma;
+				k = 6;
+				var circlecenter = {x: x, y: y};
+				var d = distance(circlecenter, relative);
+				if (d < radius){
+					k = 5;
+				}
+				for(var i = 0; i < 5; i++){
+					phi += 2 * Math.PI / 5;
+					var centro = {x: x + 2 * radius * Math.cos(phi), y: y - 2 * radius * Math.sin(phi)};
+					d = distance(centro,relative);
+					if (d < radius){
+						k = i;}		
+				}
+			}
+			
+			/*function mouseClick(e){
+				if (k < 5){
+					window.location = links[k];
+				}
+			}*/
+			
+			function mouseClick(e){
+				if (k < 5){
+					transform = true;
+					var a = "t" + k;
+					for(var i = 0; i < 5; i++){
+						document.getElementsByClassName("text")[i].style.display = "none";
+					}
+					document.getElementById(a).style.display = "block";
+				}
+				if (k == 5){
+					for(var i = 0; i < 5; i++){
+						document.getElementsByClassName("text")[i].style.display = "none";
+					}
+					transform = false;
+					radius = RADIUS;
+					x = X;
+					y = Y;
+				}
+			}
+			
+			
+			
+			function drawPentagon(center, radius, orientation, color){
+				theta = orientation;
+				ctx.beginPath();
+				ctx.moveTo(center.x + radius * Math.cos(theta), center.y + radius * Math.sin(theta));
+				for(var i = 0; i < 5; i+=1){
+					theta += 2 * Math.PI / 5;
+					ctx.lineTo(center.x + radius * Math.cos(theta), center.y + radius * Math.sin(theta));
+				}
+				ctx.fillStyle = color;
+				ctx.fill();
+				ctx.closePath();
+			
+			}
+			
+			function drawBall(color) {
+				ctx.beginPath();
+				ctx.arc(x, y, radius, 0, Math.PI*2);
+				ctx.fillStyle = color;
+				ctx.fill();
+				ctx.closePath();
+			}
+			
+			
+			function draw() {
+				ctx.clearRect(0,0,canvas.width,canvas.height);
+				if (k != 5){
+					drawBall(colorCircle[0]);
+				}
+				else{
+					drawBall(colorCircle[1]);
+				}
+				var theta = gamma;
+				if (transform && radius > 10){
+					radius -= 1;
+					x -= 6.3;
+					y -= 3.5;
+				}
+				for(var i = 0; i < 5; i++){
+					theta += 2*Math.PI / 5;
+					var centro = {x: x + 2 * radius * Math.cos(theta), y: y - 2 * radius * Math.sin(theta)};
+					if (i == k){
+						drawPentagon(centro, radius, theta, color[1]);
+					}
+					else{
+						drawPentagon(centro, radius, theta, color[0]);
+					}						
+				}
+			}
+			
+			
+			setInterval(draw, 5);
+			
+
+
+		</script>
+	</body>
+</html>
