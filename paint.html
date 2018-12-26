@@ -8,9 +8,10 @@
 		margin: auto;
 		display: block;
 		width: 800px;
-		border:1px solid #d3d3d3;
-		background-color: #f1f1f1;
+		background-color: #ffffff;
 	}
+	
+	
 	</style>
 	</head>
 	<body>
@@ -20,12 +21,17 @@
 			var canvas = document.getElementById("myCanvas");
 			var ctx = canvas.getContext("2d");
 			var x = canvas.width / 2;
+			var X = canvas.width / 2;
 			var y = canvas.height / 2;
+			var Y = canvas.height / 2
 			var radius = 70;
+			var RADIUS = 70
 			var gamma = 0;
 			var color = ["#f7cac9", "#E32934"];
-			var k = 5;
-			var links = ["index.html","http://www.wikipedia.org","http://www.github.com","http://www.khanacademy.org","http://www.janestreet.com/puzzles/current-puzzle","paint.html"]
+			var colorCircle = ["#deeaee","#92a8d1"]
+			var k = 6;
+			var transform = false;
+			//var links = ["index.html","http://www.wikipedia.org","http://www.github.com","http://www.khanacademy.org","http://www.janestreet.com/puzzles/current-puzzle","paint.html"]
 			
 			
 			document.addEventListener("mousemove", mouseFunction, false);
@@ -40,18 +46,37 @@
 			function mouseFunction(e){
 				var relative = {x: e.clientX - canvas.offsetLeft, y: e.clientY - canvas.offsetTop};
 				var phi = gamma;
-				k = 5;
+				k = 6;
+				var circlecenter = {x: x, y: y};
+				var d = distance(circlecenter, relative);
+				if (d < radius){
+					k = 5;
+				}
 				for(var i = 0; i < 5; i++){
 					phi += 2 * Math.PI / 5;
 					var centro = {x: x + 2 * radius * Math.cos(phi), y: y - 2 * radius * Math.sin(phi)};
-					var d = distance(centro,relative);
+					d = distance(centro,relative);
 					if (d < radius){
 						k = i;}		
 				}
 			}
 			
+			/*function mouseClick(e){
+				if (k < 5){
+					window.location = links[k];
+				}
+			}*/
+			
 			function mouseClick(e){
-				window.location = links[k];
+				if (k < 5){
+					transform = true;
+				}
+				if (k == 5){
+					transform = false;
+					radius = RADIUS;
+					x = X;
+					y = Y;
+				}
 			}
 			
 			
@@ -70,10 +95,10 @@
 			
 			}
 			
-			function drawBall() {
+			function drawBall(color) {
 				ctx.beginPath();
 				ctx.arc(x, y, radius, 0, Math.PI*2);
-				ctx.fillStyle = "#deeaee";
+				ctx.fillStyle = color;
 				ctx.fill();
 				ctx.closePath();
 			}
@@ -81,9 +106,18 @@
 			
 			function draw() {
 				ctx.clearRect(0,0,canvas.width,canvas.height);
-				drawBall();
-				//gamma += Math.PI/500
+				if (k != 5){
+					drawBall(colorCircle[0]);
+				}
+				else{
+					drawBall(colorCircle[1]);
+				}
 				var theta = gamma;
+				if (transform && radius > 10){
+					radius -= 1;
+					x -= 5.3;
+					y -= 3.4;
+				}
 				for(var i = 0; i < 5; i++){
 					theta += 2*Math.PI / 5;
 					var centro = {x: x + 2 * radius * Math.cos(theta), y: y - 2 * radius * Math.sin(theta)};
@@ -97,7 +131,7 @@
 			}
 			
 			
-			setInterval(draw, 10);
+			setInterval(draw, 5);
 			
 
 
