@@ -17,11 +17,45 @@
 			var ctx = canvas.getContext("2d");
 			var x = canvas.width / 2;
 			var y = canvas.height / 2;
-			var ballRadius = 30;
+			var radius = 70;
 			var gamma = 0;
+			var color = ["#f7cac9", "#E32934"];
+			var k = 5;
 			
 			
-			function drawPentagon(center, radius, orientation){
+			document.addEventListener("mousemove", mouseFunction, false);
+			//document.addEventListener("click", mouseClick, false);
+			
+			function distance(A,B){
+				var distance = Math.sqrt(Math.pow((A.x - B.x),2) + Math.pow((A.y - B.y),2));
+				return distance;
+			}
+				
+				
+			function mouseFunction(e){
+				var relative = {x: e.clientX - canvas.offsetLeft, y: e.clientY - canvas.offsetTop};
+				var phi = gamma;
+				k = 5;
+				for(var i = 0; i < 5; i++){
+					phi += 2 * Math.PI / 5;
+					var centro = {x: x + 2 * radius * Math.cos(phi), y: y - 2 * radius * Math.sin(phi)};
+					var d = distance(centro,relative);
+					if (d < radius){
+						k = i;}		
+				}
+			}
+			
+			/*function mouseClick(e){
+				whichPentagon = mouseFunction(e);
+				phi = gamma + (whichPentagon - 1) * 2 * Math.PI / 5;
+				var centro = {x: x + 2 * radius * Math.cos(phi), y: y + 2 * radius * Math.sin(phi)};
+				drawPentagon(centro, radius, phi, "#ff3050");
+				
+			}*/
+			
+			
+			
+			function drawPentagon(center, radius, orientation, color){
 				theta = orientation;
 				ctx.beginPath();
 				ctx.moveTo(center.x + radius * Math.cos(theta), center.y + radius * Math.sin(theta));
@@ -29,7 +63,7 @@
 					theta += 2 * Math.PI / 5;
 					ctx.lineTo(center.x + radius * Math.cos(theta), center.y + radius * Math.sin(theta));
 				}
-				ctx.fillStyle = "#f7cac9";
+				ctx.fillStyle = color;
 				ctx.fill();
 				ctx.closePath();
 			
@@ -37,7 +71,7 @@
 			
 			function drawBall() {
 				ctx.beginPath();
-				ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+				ctx.arc(x, y, radius, 0, Math.PI*2);
 				ctx.fillStyle = "#deeaee";
 				ctx.fill();
 				ctx.closePath();
@@ -48,10 +82,16 @@
 				ctx.clearRect(0,0,canvas.width,canvas.height);
 				drawBall();
 				//gamma += Math.PI/500
+				var theta = gamma;
 				for(var i = 0; i < 5; i++){
-					gamma += 2*Math.PI / 5;
-					var centro = {x: x + 2 * ballRadius * Math.cos(gamma), y: y + 2 * ballRadius * Math.sin(gamma)};
-					drawPentagon(centro, 30, gamma);		
+					theta += 2*Math.PI / 5;
+					var centro = {x: x + 2 * radius * Math.cos(theta), y: y - 2 * radius * Math.sin(theta)};
+					if (i == k){
+						drawPentagon(centro, radius, theta, color[1]);
+					}
+					else{
+						drawPentagon(centro, radius, theta, color[0]);
+					}						
 				}
 			}
 			
