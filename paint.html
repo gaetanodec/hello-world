@@ -25,10 +25,11 @@
 			var gamma = 0;
 			var color = ["#f7cac9", "#E32934"];
 			var k = 5;
+			var links = ["index.html","http://www.wikipedia.org","http://www.github.com","http://www.khanacademy.org","http://www.janestreet.com/puzzles/current-puzzle","paint.html"]
 			
 			
 			document.addEventListener("mousemove", mouseFunction, false);
-			//document.addEventListener("click", mouseClick, false);
+			document.addEventListener("click", mouseClick, false);
 			
 			function distance(A,B){
 				var distance = Math.sqrt(Math.pow((A.x - B.x),2) + Math.pow((A.y - B.y),2));
@@ -49,13 +50,9 @@
 				}
 			}
 			
-			/*function mouseClick(e){
-				whichPentagon = mouseFunction(e);
-				phi = gamma + (whichPentagon - 1) * 2 * Math.PI / 5;
-				var centro = {x: x + 2 * radius * Math.cos(phi), y: y + 2 * radius * Math.sin(phi)};
-				drawPentagon(centro, radius, phi, "#ff3050");
-				
-			}*/
+			function mouseClick(e){
+				window.location = links[k];
+			}
 			
 			
 			
