@@ -192,7 +192,7 @@ Non saprei che farmene io, di questa scelta. <br><br></p></div>
 						document.getElementsByClassName("text")[i].style.display = "none";
 					}
 					document.getElementById(a).style.display = "block";
-					var hei = canvas.height + 10;
+					var hei = canvas.height + canvas.height/50;
 					document.getElementById(a).style.top = hei + "px";
 				}
 				if (k == 5){
@@ -206,7 +206,7 @@ Non saprei che farmene io, di questa scelta. <br><br></p></div>
 					center.x = X;
 					center.y = Y;
 					a = "t" + k;
-					var hei = canvas.height + 10;
+					var hei = canvas.height + canvas.height/50;
 					document.getElementById(a).style.top = hei + "px";
 					document.getElementById(a).style.display = "block";
 					
@@ -237,12 +237,12 @@ Non saprei che farmene io, di questa scelta. <br><br></p></div>
 			
 			function draw() {
 				ctx.clearRect(0,0,canvas.width,canvas.height);
-				if (transform && canvas.width > (w/4) && canvas.height > (h/4)){
-					canvas.width -= 1;
-					canvas.height -= 1;
+				if (transform && canvas.width > (w/3.5) && canvas.height > (h/3.5)){
+					canvas.width -= 1.8;
+					canvas.height -= 1.8;
 					center = {x: (canvas.width / 2), y: (canvas.height / 2)};
 					radius = Math.min(canvas.width, canvas.height) / 7;
-					var hei = canvas.height + 10;
+					var hei = canvas.height + canvas.height/50;
 					document.getElementById(a).style.top = hei + "px";
 				}
 				if (k != 5){
